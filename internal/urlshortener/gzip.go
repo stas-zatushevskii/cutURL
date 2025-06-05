@@ -1,4 +1,4 @@
-package urlShortener
+package urlshortener
 
 import (
 	"encoding/json"
@@ -8,31 +8,31 @@ import (
 
 const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-"
 
-type UrlPair struct {
+type URLPair struct {
 	OldURL   string `json:"oldURL"`
 	ShortURL string `json:"shortURL"`
 }
 
-func RandUrl(length int) string {
-	randUrl := make([]byte, length)
-	for i := range randUrl {
-		randUrl[i] = charset[rand.Intn(len(charset))]
+func RandURL(length int) string {
+	randURL := make([]byte, length)
+	for i := range randURL {
+		randURL[i] = charset[rand.Intn(len(charset))]
 	}
 
-	return "http://localhost:8080/" + string(randUrl)
+	return "http://localhost:8080/" + string(randURL)
 }
 
-func CreateJson(oldUrl, newUrl string) string {
-	data := UrlPair{
-		OldURL:   oldUrl,
-		ShortURL: newUrl,
+func CreateJson(oldURL, newURL string) string {
+	data := URLPair{
+		OldURL:   oldURL,
+		ShortURL: newURL,
 	}
 	jsonStr, _ := json.Marshal(data)
 	return string(jsonStr)
 }
 
-func ParseJson(jsonData string) (oldUrl, newUrl string, error error) {
-	var data UrlPair
+func ParseJSON(jsonData string) (oldURL, newURL string, error error) {
+	var data URLPair
 	err := json.Unmarshal([]byte(jsonData), &data)
 	if err != nil {
 		return "", "", err
@@ -40,7 +40,7 @@ func ParseJson(jsonData string) (oldUrl, newUrl string, error error) {
 	return data.OldURL, data.ShortURL, nil
 }
 
-func UrlCheck(url string) bool {
+func URLCheck(URL string) bool {
 	re := regexp.MustCompile(`^((ftp|http|https):\/\/)?([a-zA-Z0-9\-]+\.)+[a-zA-Z]{2,}(:\d+)?(\/[\w\-._~:/?#[\]@!$&'()*+,;=]*)?$`)
-	return re.MatchString(url)
+	return re.MatchString(URL)
 }

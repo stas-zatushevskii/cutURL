@@ -10,8 +10,8 @@ func RouterNew() *chi.Mux {
 	r := chi.NewRouter()
 	s := storage.NewStorage()
 
-	r.Post("/", handlers.CreateUrlHandler(s))
-	r.Get("/{id}", handlers.GetUrlHandler(s))
+	r.Post("/", handlers.CreateURLHandler(s))
+	r.Get("/{id}", handlers.GetURLHandler(s))
 
 	return r
 }

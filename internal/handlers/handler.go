@@ -2,34 +2,34 @@ package handlers
 
 import (
 	"cutURL/internal/storage"
-	"cutURL/internal/urlShortener"
+	"cutURL/internal/urlshortener"
 	"github.com/go-chi/chi/v5"
 	"io"
 	"net/http"
 	"strconv"
 )
 
-func CreateUrlHandler(storage *storage.UrlStorage) func(http.ResponseWriter, *http.Request) {
+func CreateURLHandler(storage *storage.URLStorage) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		body, err := io.ReadAll(r.Body)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		if !urlShortener.UrlCheck(string(body)) {
-			http.Error(w, "Invalid url!", http.StatusBadRequest)
+		if !urlshortener.URLCheck(string(body)) {
+			http.Error(w, "Invalid URL!", http.StatusBadRequest)
 			return
 		}
-		newUrl := urlShortener.RandUrl(8)
-		jsonForDb := urlShortener.CreateJson(string(body), newUrl)
-		storage.SetData(jsonForDb)
+		newURL := urlshortener.RandURL(8)
+		JSONForDb := urlshortener.CreateJson(string(body), newURL)
+		storage.SetData(JSONForDb)
 
 		w.WriteHeader(http.StatusCreated)
-		w.Write([]byte(newUrl))
+		w.Write([]byte(newURL))
 	}
 }
 
-func GetUrlHandler(storage *storage.UrlStorage) func(http.ResponseWriter, *http.Request) {
+func GetURLHandler(storage *storage.URLStorage) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		id := chi.URLParam(r, "id")
 		intId, err := strconv.Atoi(id)
@@ -46,11 +46,11 @@ func GetUrlHandler(storage *storage.UrlStorage) func(http.ResponseWriter, *http.
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		oldUrl, _, err := urlShortener.ParseJson(data)
+		oldURL, _, err := urlshortener.ParseJSON(data)
 		if err != nil {
-			http.Error(w, "Got error whiparsing json from database", http.StatusBadRequest)
+			http.Error(w, "Got error while parsing JSON from database", http.StatusBadRequest)
 			return
 		}
-		http.Redirect(w, r, oldUrl, http.StatusTemporaryRedirect)
+		http.Redirect(w, r, oldURL, http.StatusTemporaryRedirect)
 	}
 }
