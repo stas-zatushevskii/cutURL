@@ -8,7 +8,7 @@ import (
 const defaultCharset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-"
 
 type URLBuilder struct {
-	StringId string
+	StringID string
 	Length   int
 	Charset  string
 }
@@ -27,11 +27,11 @@ func (u *URLBuilder) randStringValues() {
 	for i := range randURL {
 		randURL[i] = u.Charset[rand.Intn(len(u.Charset))]
 	}
-	u.StringId = string(randURL)
+	u.StringID = string(randURL)
 }
 
 func (u *URLBuilder) CreateURL() string {
-	return "http://localhost:8080/" + u.StringId
+	return "http://localhost:8080/" + u.StringID
 }
 
 func URLCheck(URL string) bool {
