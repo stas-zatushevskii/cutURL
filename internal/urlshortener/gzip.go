@@ -1,43 +1,37 @@
 package urlshortener
 
 import (
-	"encoding/json"
 	"math/rand"
 	"regexp"
 )
 
-const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-"
+const defaultCharset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-"
 
-type URLPair struct {
-	OldURL   string `json:"oldURL"`
-	ShortURL string `json:"shortURL"`
+type URLBuilder struct {
+	StringId string
+	Length   int
+	Charset  string
 }
 
-func RandURL(length int) string {
-	randURL := make([]byte, length)
+func NewURLBuilder(length int) *URLBuilder {
+	builder := &URLBuilder{
+		Length:  length,
+		Charset: defaultCharset,
+	}
+	builder.randStringValues()
+	return builder
+}
+
+func (u *URLBuilder) randStringValues() {
+	randURL := make([]byte, u.Length)
 	for i := range randURL {
-		randURL[i] = charset[rand.Intn(len(charset))]
+		randURL[i] = u.Charset[rand.Intn(len(u.Charset))]
 	}
-
-	return "http://localhost:8080/" + string(randURL)
+	u.StringId = string(randURL)
 }
 
-func CreateJson(oldURL, newURL string) string {
-	data := URLPair{
-		OldURL:   oldURL,
-		ShortURL: newURL,
-	}
-	jsonStr, _ := json.Marshal(data)
-	return string(jsonStr)
-}
-
-func ParseJSON(jsonData string) (oldURL, newURL string, error error) {
-	var data URLPair
-	err := json.Unmarshal([]byte(jsonData), &data)
-	if err != nil {
-		return "", "", err
-	}
-	return data.OldURL, data.ShortURL, nil
+func (u *URLBuilder) CreateURL() string {
+	return "http://localhost:8080/" + u.StringId
 }
 
 func URLCheck(URL string) bool {

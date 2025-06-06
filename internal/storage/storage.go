@@ -1,29 +1,25 @@
 package storage
 
 type Storage interface {
-	SetData(URL string)
-	GetData(int int) string
+	SetData(URL, newURL string)
+	GetData(URL string) string
 }
 
-// поле id для подсчета используемых айдишников в бд
-// example: 1: "{"oldURL: NewURL"}"
+// example ->  abcd: https://google.com"
 type URLStorage struct {
-	data map[int]string
-	id   int
+	data map[string]string
 }
 
 func NewStorage() *URLStorage {
 	return &URLStorage{
-		data: make(map[int]string),
-		id:   0,
+		data: make(map[string]string),
 	}
 }
 
-func (s *URLStorage) SetData(URL string) {
-	s.data[s.id] = URL
-	s.id++
+func (s *URLStorage) SetData(URL, newURL string) {
+	s.data[newURL] = URL
 }
 
-func (s *URLStorage) GetData(id int) string {
-	return s.data[id]
+func (s *URLStorage) GetData(newURL string) string {
+	return s.data[newURL]
 }
