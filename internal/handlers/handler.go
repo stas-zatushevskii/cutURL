@@ -21,7 +21,7 @@ func CreateURLHandler(storage *storage.URLStorage) func(http.ResponseWriter, *ht
 		}
 		u := urlshortener.NewURLBuilder(8)
 		newURL := u.CreateURL()
-		storage.SetData(string(body), u.StringId)
+		storage.SetData(string(body), u.StringID)
 
 		w.WriteHeader(http.StatusCreated)
 		w.Write([]byte(newURL))
