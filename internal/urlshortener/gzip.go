@@ -15,8 +15,9 @@ type URLBuilder struct {
 
 func NewURLBuilder(length int) *URLBuilder {
 	builder := &URLBuilder{
-		Length:  length,
-		Charset: defaultCharset,
+		Length:   length,
+		Charset:  defaultCharset,
+		StringID: "",
 	}
 	builder.randStringValues()
 	return builder
