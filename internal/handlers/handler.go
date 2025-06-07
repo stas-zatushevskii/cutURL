@@ -3,39 +3,42 @@ package handlers
 import (
 	"cutURL/internal/storage"
 	"cutURL/internal/urlshortener"
-	"github.com/go-chi/chi/v5"
+	"github.com/gin-gonic/gin"
 	"io"
 	"net/http"
 )
 
-func CreateURLHandler(storage *storage.URLStorage) func(http.ResponseWriter, *http.Request) {
-	return func(w http.ResponseWriter, r *http.Request) {
-		body, err := io.ReadAll(r.Body)
+func CreateURLHandler(storage *storage.URLStorage) func(c *gin.Context) {
+	return func(c *gin.Context) {
+		body, err := io.ReadAll(c.Request.Body)
+
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
 		if !urlshortener.URLCheck(string(body)) {
-			http.Error(w, "Invalid URL!", http.StatusBadRequest)
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid URL"})
 			return
 		}
+
 		u := urlshortener.NewURLBuilder(8)
 		newURL := u.CreateURL()
 		storage.SetData(string(body), u.StringID)
 
-		w.WriteHeader(http.StatusCreated)
-		w.Write([]byte(newURL))
+		c.String(http.StatusCreated, newURL)
 	}
 }
 
-func GetURLHandler(storage *storage.URLStorage) func(http.ResponseWriter, *http.Request) {
-	return func(w http.ResponseWriter, r *http.Request) {
-		newURL := chi.URLParam(r, "id")
+func GetURLHandler(storage *storage.URLStorage) func(c *gin.Context) {
+	return func(c *gin.Context) {
+		newURL := c.Param("id")
 		oldURL := storage.GetData(newURL)
+
 		if oldURL == "" {
-			http.Error(w, "Not found", http.StatusNotFound)
+			c.JSON(http.StatusNotFound, gin.H{"error": "URL not found"})
 			return
 		}
-		http.Redirect(w, r, oldURL, http.StatusTemporaryRedirect)
+
+		http.Redirect(c.Writer, c.Request, oldURL, http.StatusTemporaryRedirect)
 	}
 }
