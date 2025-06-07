@@ -3,6 +3,7 @@ package config
 import (
 	"flag"
 	"os"
+	"strings"
 )
 
 type Config struct {
@@ -25,9 +26,16 @@ func (c *Config) ParseEnv() {
 	}
 }
 
+func (c *Config) ValidateBaseURL() {
+	if !strings.HasSuffix(c.BaseURL, "/") {
+		c.BaseURL += "/"
+	}
+}
+
 func LoadConfig() *Config {
 	cfg := &Config{}
 	cfg.ParseFlags()
 	cfg.ParseEnv()
+	cfg.ValidateBaseURL()
 	return cfg
 }
