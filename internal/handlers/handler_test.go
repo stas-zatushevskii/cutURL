@@ -44,7 +44,8 @@ func TestCreateURLHandler(t *testing.T) {
 
 			router := gin.Default()
 			storage := storage.NewStorage()
-			router.POST("/create", CreateURLHandler(storage))
+			baseURLTest := "http://localhost:8080"
+			router.POST("/create", CreateURLHandler(storage, baseURLTest))
 
 			req := httptest.NewRequest(http.MethodPost, "/create", strings.NewReader(tt.input))
 			resp := httptest.NewRecorder()

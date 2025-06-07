@@ -12,7 +12,7 @@ type Config struct {
 
 func (c *Config) ParseFlags() {
 	flag.StringVar(&c.ServerURL, "a", "127.0.0.1:8080", "address for server")
-	flag.StringVar(&c.BaseURL, "b", "http://localhost:8080/", "address for base url of shortener")
+	flag.StringVar(&c.BaseURL, "b", "http://127.0.0.1:8080/", "address for base url of shortener")
 	flag.Parse()
 }
 
