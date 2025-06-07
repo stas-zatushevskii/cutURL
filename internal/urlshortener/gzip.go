@@ -36,5 +36,6 @@ func (u *URLBuilder) CreateURL(BaseURL string) string {
 
 func URLCheck(URL string) bool {
 	re := regexp.MustCompile(`^((ftp|http|https):\/\/)?([a-zA-Z0-9\-]+\.)+[a-zA-Z]{2,}(:\d+)?(\/[\w\-._~:/?#[\]@!$&'()*+,;=]*)?$`)
+
 	return re.MatchString(URL)
 }
