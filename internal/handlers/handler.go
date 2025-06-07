@@ -38,7 +38,6 @@ func GetURLHandler(storage *storage.URLStorage) func(c *gin.Context) {
 			c.JSON(http.StatusNotFound, gin.H{"error": "URL not found"})
 			return
 		}
-
 		http.Redirect(c.Writer, c.Request, oldURL, http.StatusTemporaryRedirect)
 	}
 }
