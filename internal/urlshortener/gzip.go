@@ -31,7 +31,7 @@ func (u *URLBuilder) randStringValues() {
 }
 
 func (u *URLBuilder) CreateURL(BaseURL string) string {
-	return BaseURL + u.StringID
+	return BaseURL + "/" + u.StringID
 }
 
 func URLCheck(URL string) bool {
