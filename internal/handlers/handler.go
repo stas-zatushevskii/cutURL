@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-func CreateURLHandler(storage *storage.URLStorage) func(c *gin.Context) {
+func CreateURLHandler(storage *storage.URLStorage, BaseURL string) func(c *gin.Context) {
 	return func(c *gin.Context) {
 		body, err := io.ReadAll(c.Request.Body)
 
@@ -22,7 +22,7 @@ func CreateURLHandler(storage *storage.URLStorage) func(c *gin.Context) {
 		}
 
 		u := urlshortener.NewURLBuilder(8)
-		newURL := u.CreateURL()
+		newURL := u.CreateURL(BaseURL)
 		storage.SetData(string(body), u.StringID)
 
 		c.String(http.StatusCreated, newURL)

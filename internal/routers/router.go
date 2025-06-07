@@ -6,21 +6,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-//func RouterNew() *chi.Mux {
-//	r := chi.NewRouter()
-//	s := storage.NewStorage()
-//
-//	r.Post("/", handlers.CreateURLHandler(s))
-//	r.Get("/{id}", handlers.GetURLHandler(s))
-//
-//	return r
-//}
-
-func RouterNew() *gin.Engine {
+func RouterNew(BaseURL string) *gin.Engine {
 	r := gin.Default()
 	s := storage.NewStorage()
 
-	r.POST("/", handlers.CreateURLHandler(s))
+	r.POST("/", handlers.CreateURLHandler(s, BaseURL))
 	r.GET("/:id", handlers.GetURLHandler(s))
 
 	return r

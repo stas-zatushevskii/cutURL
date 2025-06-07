@@ -30,8 +30,8 @@ func (u *URLBuilder) randStringValues() {
 	u.StringID = string(randURL)
 }
 
-func (u *URLBuilder) CreateURL() string {
-	return "http://localhost:8080/" + u.StringID
+func (u *URLBuilder) CreateURL(BaseURL string) string {
+	return BaseURL + u.StringID
 }
 
 func URLCheck(URL string) bool {
